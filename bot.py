@@ -37,15 +37,13 @@ async def start(bot, message):
     await message.reply(START_MSG.format(message.from_user.mention))
 
 @User.on_message(filters.chat(GROUPS))
-async def delete(user, message):
+async def delete_bot_messages(_, message):
     try:
-       if message.from_user.id in ADMINS:
-          return
-       else:
-          await asyncio.sleep(TIME)
-          await message.delete()
+        if message.from_user and message.from_user.is_bot:
+            await asyncio.sleep(TIME)  # Replace 'TIME' with the desired delay before deleting the message
+            await app.delete_messages(message.chat.id, message.message_id)
     except Exception as e:
-       print(e)
+        print(e)
        
 User.start()
 print("User Started!")
